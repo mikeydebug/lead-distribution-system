@@ -2,6 +2,18 @@
 
 > A **production-grade, battle-tested lead distribution engine** built for correctness, concurrency safety, and real-time observability. Handles extreme load with zero data corruption and perfect fairness.
 
+## 🎬 Live Demo
+
+**👉 [Try the Live Demo Now](https://lead-distribution-system-dkxn.vercel.app/request-service)**
+
+Experience the system in action:
+- Submit leads in real-time
+- Watch live dashboard updates
+- Test concurrency & webhook idempotency
+- See fair round-robin allocation in action
+
+*Deployed on Vercel | Always available | Zero downtime*
+
 ---
 
 ## 🎯 Overview
