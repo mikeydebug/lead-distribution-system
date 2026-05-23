@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Provider {
+  id             Int              @id @default(autoincrement())
+  name           String
+  quota          Int              @default(10) // Monthly quota limit
+  currentQuota   Int              @default(10) // Remaining quota
+  assignments    LeadAssignment[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+}
+
+model Service {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  leads       Lead[]
+  createdAt   DateTime @default(now())
+}
+
+model Lead {
+  id          Int              @id @default(autoincrement())
+  name        String
+  phone       String
+  city        String
+  serviceId   Int
+  service     Service          @relation(fields: [serviceId], references: [id])
+  assignments LeadAssignment[]
+  createdAt   DateTime         @default(now())
+
+  @@unique([phone, serviceId]) // Enforces duplicate rule at DB level
+}
+
+model LeadAssignment {
+  leadId      Int
+  providerId  Int
+  lead        Lead     @relation(fields: [leadId], references: [id])
+  provider    Provider @relation(fields: [providerId], references: [id])
+  assignedAt  DateTime @default(now())
+
+  @@id([leadId, providerId])
+}
+
+model AllocationState {
+  id             Int      @id @default(1)
+  serviceId      Int      @unique
+  lastProviderId Int?     // Tracks the last assigned provider in the round-robin pool
+  updatedAt      DateTime @updatedAt
+}
+
+model WebhookEvent {
+  id          String   @id // Uniquely identifies the webhook payload
+  type        String
+  processedAt DateTime @default(now())
+}
