@@ -81,7 +81,7 @@ export async function processLead(data: { name: string; phone: string; city: str
     // Find starting index in the pool
     let startIndex = 0;
     if (currentState.lastProviderId !== null) {
-      const lastIndex = rule.pool.indexOf(currentState.lastProviderId);
+      const lastIndex = (rule.pool as readonly number[]).indexOf(currentState.lastProviderId);
       if (lastIndex !== -1) {
         startIndex = (lastIndex + 1) % rule.pool.length;
       }
